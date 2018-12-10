@@ -11,19 +11,21 @@ class Racer extends Horse {
     constructor(name, breed) {
         super(name, breed);
 
-        this.speed = 0;
         this.distance = 0;
+        this.speed = 0;
         this.setSpeed();
     }
 
     setSpeed() {
         const min = 10;
         const max = 15;
+
         this.speed = Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     run() {
         let timer = 1000;
+
         for (let i = 0; i < 10; i++) {
             setTimeout(() => {
                 this.distance += this.speed;
@@ -49,23 +51,23 @@ class Race {
             'Appaloosa', 'Andalusian'];
 
         for (let i = 0; i < 10; i++) {
-            const randomHorseNames = horseNames[Math.floor(Math.random() * 31)];
-            const randomHorseBreeds = horseBreeds[Math.floor(Math.random() * 6)];
+            const randomHorseName = horseNames[Math.floor(Math.random() * 31)];
+            const randomHorseBreed = horseBreeds[Math.floor(Math.random() * 6)];
 
-            this.horses.push(new Racer(randomHorseNames, randomHorseBreeds));
+            this.horses.push(new Racer(randomHorseName, randomHorseBreed));
         }
     }
 
     startRace() {
-        let timer = 2000;
+        this.horses.forEach(racer => racer.run());
 
-        this.horses.forEach(racingHorse => racingHorse.run());
+        let timer = 2000;
 
         for (let i = 0; i < 5; i++) {
             setTimeout(() => {
-                console.log('\n');
-                this.horses.forEach((racingHorse) => {
-                    console.log(`${racingHorse.distance} - ${racingHorse.name} ${racingHorse.breed}`);
+                console.log(' ');
+                this.horses.forEach((racer) => {
+                    console.log(`${racer.distance} - ${racer.name} ${racer.breed}`);
                 });
             }, timer);
             timer += 2000;
@@ -74,9 +76,18 @@ class Race {
 
     showResult() {
         const racingTime = 10000;
+
         setTimeout(() => {
             this.horses.sort((a, b) => b.distance - a.distance);
-            console.log(`\nThe Winner is ${this.horses[0].name} ${this.horses[0].breed}\n`);
+
+            const winner = `\nThe Winner is ${this.horses[0].name} ${this.horses[0].breed}\n`;
+            const underscore = '_'.repeat(winner.length - 2).concat('\n');
+            console.log(underscore + winner + underscore);
+
+            this.horses.forEach((racer) => {
+                console.log(`${racer.distance} - ${racer.name} ${racer.breed}`);
+            });
+            console.log(' ');
         }, racingTime);
     }
 }
